@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ibaixiong.merchant.dao.SsssInvitationCodeDao">
+	<resultMap id="BaseResultMap" type="com.ibaixiong.entity.SsssInvitationCode">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="create_date_time" property="createDateTime"
+			jdbcType="TIMESTAMP" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="status" property="status" jdbcType="TINYINT" />
+		<result column="invalid" property="invalid" jdbcType="TINYINT" />
+		<result column="money" property="money" jdbcType="REAL" />
+		<result column="receive_user_phone" property="receiveUserPhone"
+			jdbcType="VARCHAR" />
+		<result column="receive_user_name" property="receiveUserName"
+			jdbcType="VARCHAR" />
+		<result column="valid_time" property="validTime" jdbcType="TIMESTAMP" />
+		<result column="user_id" property="userId" jdbcType="BIGINT" />
+		<result column="ssss_id" property="ssssId" jdbcType="BIGINT" />
+		<result column="order_number" property="orderNumber" jdbcType="CHAR" />
+		<result column="pay_number" property="payNumber" jdbcType="CHAR" />
+		<result column="use_time" property="useTime" jdbcType="TIMESTAMP" />
+		<collection property="allowProducts" ofType="com.ibaixiong.entity.SsssInvitationCodeProduct" column="id" select="selectCodeProductByInvitationCodeId"></collection>
+	</resultMap>
+	<resultMap id="ProductBaseResultMap" type="com.ibaixiong.entity.SsssInvitationCodeProduct" >
+		<id column="id" property="id" jdbcType="BIGINT" />
+	    <result column="invitation_code_id" property="invitationCodeId" jdbcType="BIGINT" />
+	    <result column="product_id" property="productId" jdbcType="BIGINT" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, create_date_time, update_time, status, invalid, money,
+		receive_user_phone, receive_user_name,
+		valid_time,user_id, ssss_id, order_number, use_time,pay_number
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from tbl_ssss_invitation_code
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<select id="getSsssInvitationCodeList" resultMap="BaseResultMap"
+		parameterType="java.lang.Byte">
+		select
+		<include refid="Base_Column_List" />
+		from tbl_ssss_invitation_code 
+		where ssss_id = #{ssssId,jdbcType=BIGINT}
+		<if test="status != null">
+			and status = #{status,jdbcType=TINYINT}
+		</if>
+		order by id desc
+	</select>
+	
+	<select id="selectCodeProductByInvitationCodeId" parameterType="long" resultMap="ProductBaseResultMap">
+         select 
+	     id, invitation_code_id, product_id 
+	     from tbl_ssss_invitation_code_product
+	     where invitation_code_id = #{invitationCodeId,jdbcType=BIGINT}
+  	</select>
+	
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		tbl_ssss_invitation_code
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<insert id="insert" parameterType="com.ibaixiong.entity.SsssInvitationCode" useGeneratedKeys="true" keyProperty="id">
+		insert into
+		tbl_ssss_invitation_code (id, create_date_time, update_time,
+		status,
+		invalid, money,
+		receive_user_phone, receive_user_name, valid_time,user_id, ssss_id,
+		order_number, use_time,pay_number)
+		values
+		(#{id,jdbcType=BIGINT}, #{createDateTime,jdbcType=TIMESTAMP},
+		#{updateTime,jdbcType=TIMESTAMP},
+		#{status,jdbcType=TINYINT},
+		#{invalid,jdbcType=TINYINT}, #{money,jdbcType=REAL},
+		#{receiveUserPhone,jdbcType=VARCHAR},
+		#{receiveUserName,jdbcType=VARCHAR}, #{validTime,jdbcType=TIMESTAMP},
+		#{userId,jdbcType=BIGINT},
+		#{ssssId,jdbcType=BIGINT},
+		#{orderNumber,jdbcType=CHAR},
+		#{useTime,jdbcType=TIMESTAMP},
+		#{payNumber,jdbcType=CHAR})
+	</insert>
+
+	<update id="updateByPrimaryKeySelective" parameterType="com.ibaixiong.entity.SsssInvitationCode">
+		update tbl_ssss_invitation_code
+		<set>
+			<if test="createDateTime != null">
+				create_date_time = #{createDateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=TINYINT},
+			</if>
+			<if test="invalid != null">
+				invalid = #{invalid,jdbcType=TINYINT},
+			</if>
+			<if test="money != null">
+				money = #{money,jdbcType=REAL},
+			</if>
+			<if test="receiveUserPhone != null">
+				receive_user_phone =
+				#{receiveUserPhone,jdbcType=VARCHAR},
+			</if>
+			<if test="receiveUserName != null">
+				receive_user_name = #{receiveUserName,jdbcType=VARCHAR},
+			</if>
+			<if test="validTime != null">
+				valid_time = #{validTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="userId != null">
+				user_id = #{userId,jdbcType=BIGINT},
+			</if>
+			<if test="ssssId != null">
+				ssss_id = #{ssssId,jdbcType=BIGINT},
+			</if>
+			<if test="orderNumber != null">
+				order_number = #{orderNumber,jdbcType=CHAR},
+			</if>
+			<if test="useTime != null">
+				use_time = #{useTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="payNumber != null">
+				pay_number = #{payNumber,jdbcType=CHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	
+	<update id="updateInvitationCodeStatusByIdAnd4SId">
+		update tbl_ssss_invitation_code
+		<set>
+			<if test="status != null">
+				status = #{status,jdbcType=TINYINT},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT} and 
+		ssss_id = #{ssssId,jdbcType=BIGINT}
+	</update>
+	
+
+</mapper>
